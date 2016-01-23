@@ -5,7 +5,7 @@ import (
 	"encoding/xml"
 	"html/template"
 
-	"code.google.com/p/go-charset/charset"
+	"github.com/bmallred/go-charset/charset"
 )
 
 // TODO: Determine if this import is still necessary:
