@@ -22,6 +22,7 @@ func main() {
 	app.Commands = []cli.Command{
 		cmd.CommandRun,
 		cmd.CommandScour,
+		cmd.CommandScourge,
 	}
 
 	app.Run(os.Args)
