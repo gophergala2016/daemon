@@ -9,18 +9,19 @@ import (
 
 // Application variables for versioning
 const (
-	APP_NAME    = "daemon"
-	APP_USAGE   = ""
-	APP_VERSION = "0.0.0"
+	AppName    = "daemon"
+	AppUsage   = ""
+	AppVersion = "0.0.0"
 )
 
 func main() {
 	app := cli.NewApp()
-	app.Name = APP_NAME
-	app.Usage = APP_USAGE
-	app.Version = APP_VERSION
+	app.Name = AppName
+	app.Usage = AppUsage
+	app.Version = AppVersion
 	app.Commands = []cli.Command{
 		cmd.CommandRun,
+		cmd.CommandScour,
 	}
 
 	app.Run(os.Args)
