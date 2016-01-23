@@ -1,14 +1,17 @@
 package cmd
 
 import (
+	"bytes"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/codegangsta/cli"
+	"github.com/gophergala2016/daemon/common"
 )
 
 const (
@@ -36,24 +39,36 @@ var (
 // Run the main daemon processes.
 func run(context *cli.Context) {
 	initEnvironment()
+	exe := currentExecutable()
 
 	// At an interval scour the interwebs for stories to trigger events
 	doEvery(interval, func() {
 		log.Println("Scanning")
 
+		feeds := feedsPath()
 		stories := getStories(storyDirectory())
 		for story := range stories {
 			go func(s string) {
 				// Read the story contents
-				// TODO: Store file contents in `contents` variable
-				_, err := ioutil.ReadFile(s)
+				contents, err := ioutil.ReadFile(s)
 				if err != nil {
 					log.Printf("  [Fail] (%s) %s\n", s, err)
 					return
 				}
 
-				// TODO: Create a chain of piped commands
-				// TODO: Execute the chain while supplying the story as input
+				// Create a chain of piped commands
+				pipeline := common.Pipeline{
+					exec.Command(exe, "scour", "--feeds", feeds),
+					exec.Command(exe, "scourge"),
+				}
+
+				// Execute the chain while supplying the story as input
+				reader := bytes.NewReader(contents)
+				_, err = pipeline.Run(reader)
+				if err != nil {
+					log.Printf("  [Skip] (%s)\n", s)
+					return
+				}
 
 				log.Printf("  [Pass] (%s)\n", s)
 			}(story)
@@ -111,6 +126,14 @@ func storyDirectory() string {
 	}
 
 	return path
+}
+
+// Get the path to this executable.
+func currentExecutable() string {
+	fn := os.Args[0]
+	fd := filepath.Dir(fn)
+	fp, _ := filepath.Abs(fd)
+	return fp + "/" + fn
 }
 
 // Find all story files from the given directory.
