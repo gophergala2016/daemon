@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"code.revolvingcow.com/bmallred/reader"
+	"github.com/gophergala2016/daemon/reader"
 )
 
 // Trigger represents a command to be executed on a story hit.
