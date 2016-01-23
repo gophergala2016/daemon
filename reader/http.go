@@ -22,7 +22,7 @@ func scrape(url string) ([]byte, error) {
 	return contents, nil
 }
 
-// Get the feed for an RSS endpoint
+// GetFeed for an RSS endpoint.
 func GetFeed(url string) (Rss, error) {
 	content, err := scrape(url)
 	if err != nil {

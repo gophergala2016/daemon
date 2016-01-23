@@ -5,33 +5,34 @@ import (
 	"html/template"
 )
 
+// Link is a hyperlink to the article.
 type Link struct {
 	Href string `xml:"href,attr"`
 }
 
-// Atom author
+// Author of the article.
 type Author struct {
 	Name  string `xml:"name"`
 	Email string `xml:"email"`
 }
 
-// Atom entry
+// Entry is an article in an atom feed.
 type Entry struct {
 	Title   string `xml:"title"`
 	Summary string `xml:"summary"`
 	Content string `xml:"content"`
-	Id      string `xml:"id"`
+	ID      string `xml:"id"`
 	Updated string `xml:"updated"`
 	Link    Link   `xml:"link"`
 	Author  Author `xml:"author"`
 }
 
-// Atom version 1.0 structure
+// Atom version 1.0 structure.
 type Atom struct {
 	XMLName  xml.Name `xml:"http://www.w3.org/2005/Atom feed"`
 	Title    string   `xml:"title"`
 	Subtitle string   `xml:"subtitle"`
-	Id       string   `xml:"id"`
+	ID       string   `xml:"id"`
 	Updated  string   `xml:"updated"`
 	Rights   string   `xml:"rights"`
 	Link     Link     `xml:"link"`
@@ -39,7 +40,7 @@ type Atom struct {
 	Entries  []Entry  `xml:"entry"`
 }
 
-// Convert from Atom to RSS
+// ToRss converts from Atom to RSS
 func (a *Atom) ToRss() *Rss {
 	r := Rss{
 		Title:       a.Title,

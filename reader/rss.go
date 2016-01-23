@@ -6,8 +6,10 @@ import (
 	"html/template"
 
 	"code.google.com/p/go-charset/charset"
-	_ "code.google.com/p/go-charset/data"
 )
+
+// TODO: Determine if this import is still necessary:
+//       _ "code.google.com/p/go-charset/data"
 
 // Error message for when the XML is expected to be in Atom format
 const errorExpectedAtom = "expected element type <rss> but have <feed>"
@@ -15,7 +17,7 @@ const errorExpectedAtom = "expected element type <rss> but have <feed>"
 // Error message for when the XML is expecting ISO-8859-1 encoding
 const errorIso8859 = "xml: encoding \"iso-8859-1\" declared but Decoder.CharsetReader is nil"
 
-// RSS item
+// Item of an RSS feed.
 type Item struct {
 	Title       string        `xml:"title" json:"title"`
 	Link        string        `xml:"link" json:"link"`
@@ -25,7 +27,7 @@ type Item struct {
 	Comments    string        `xml:"comments" json:"comments"`
 }
 
-// RSS version 2.0 structure
+// Rss version 2.0 structure.
 type Rss struct {
 	XMLName     xml.Name `xml:"rss"`
 	Version     string   `xml:"version,attr"`
@@ -36,7 +38,7 @@ type Rss struct {
 	Items       []Item   `xml:"channel>item"`
 }
 
-// Parse Atom feed with the supplied content
+// ParseAtom parses an Atom feed with the supplied content.
 func (r *Rss) ParseAtom(content []byte) error {
 	a := Atom{}
 
@@ -50,7 +52,7 @@ func (r *Rss) ParseAtom(content []byte) error {
 	return nil
 }
 
-// Parse RSS feed from the given URI
+// ParseFeed parses an Rss feed from the given URI.
 func (r *Rss) ParseFeed(content []byte) error {
 	d := createDecoder(content)
 	err := d.Decode(&r)
@@ -63,7 +65,7 @@ func (r *Rss) ParseFeed(content []byte) error {
 	}
 
 	if r.Version == "2.0" {
-		for i, _ := range r.Items {
+		for i := range r.Items {
 			if r.Items[i].Content != "" {
 				r.Items[i].Description = r.Items[i].Content
 			}

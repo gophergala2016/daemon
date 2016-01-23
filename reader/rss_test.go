@@ -2,7 +2,7 @@ package reader
 
 import "testing"
 
-var feeds []string = []string{
+var feeds = []string{
 	// Reuter
 	"http://feeds.reuters.com/news/artsculture?format=xml",
 	"http://feeds.reuters.com/reuters/businessnews?format=xml",
