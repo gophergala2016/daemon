@@ -9,7 +9,7 @@ import (
 var (
 	stdin *os.File
 
-	storyWithTriggers []byte = []byte(`{
+	storyWithTriggers = []byte(`{
       "included": ["daemon", "tech"],
       "excluded": ["satan"],
       "triggers": [{
@@ -19,7 +19,7 @@ var (
       }]
     }`)
 
-	storyWithoutTriggers []byte = []byte(`{
+	storyWithoutTriggers = []byte(`{
       "included": ["daemon", "tech"],
       "excluded": ["satan"],
       "triggers": [{
