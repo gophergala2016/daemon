@@ -1,5 +1,5 @@
 {
-  "included": ["gopher", "gala", "go"],
+  "included": ["gopher", "gala"],
   "excluded": ["game"],
   "triggers": [{
     "command": "touch",

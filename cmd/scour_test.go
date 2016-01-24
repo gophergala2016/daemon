@@ -47,10 +47,14 @@ func TestScourValidFeed(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
+
 	defer os.Remove(file.Name())
-	file.WriteString("http://feeds.reuters.com/news/artsculture?format=xml")
+	file.WriteString("http://golangweekly.com/rss/17nm799j")
 
 	os.Args = []string{"test", "scour", "--feeds", file.Name()}
+	os.Stdin = pushToStdin(storyWithTriggers)
+	defer cleanupStdin()
+
 	app := cli.NewApp()
 	app.Name = "test"
 	app.Commands = []cli.Command{

@@ -55,6 +55,10 @@ func (pipeline Pipeline) Run(in io.Reader) ([]byte, error) {
 		}
 	}
 
+	if stderr.Len() > 0 {
+		return stderr.Bytes(), errors.New("Errors occurred during processing")
+	}
+
 	// Return the output collected
 	return stdout.Bytes(), nil
 }

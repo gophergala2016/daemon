@@ -25,6 +25,7 @@ func scourge(context *cli.Context) {
 	story, err := common.ReadStory(common.StandardInput())
 	if err != nil {
 		log.Println(err)
+		return
 	}
 
 	// Check if there is anything to execute
@@ -40,14 +41,16 @@ func scourge(context *cli.Context) {
 		// If there was a problem starting the command and it is set
 		// to wait then we fail hard
 		if err != nil && t.Wait {
-			log.Fatalf("Failed to execute [%s]", t.ToString())
+			log.Printf("Failed to execute [%s]", t.ToString())
+			return
 		}
 
 		// If we are to wait then we need to check its status and
 		// fail hard if there was an issue
 		if t.Wait {
 			if err = cmd.Wait(); err != nil {
-				log.Fatalf("Error executing [%s]", t.ToString())
+				log.Printf("Error executing [%s]", t.ToString())
+				return
 			}
 		}
 	}

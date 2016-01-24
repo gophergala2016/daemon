@@ -10,10 +10,10 @@ var (
 	stdin *os.File
 
 	storyWithTriggers = []byte(`{
-      "included": ["daemon", "tech"],
-      "excluded": ["satan"],
+      "included": ["gopher", "gala"],
+      "excluded": ["prairie"],
       "triggers": [{
-        "command": "touch",
+        "command": "echo",
         "arguments": ["pass"],
         "wait": false
       }]

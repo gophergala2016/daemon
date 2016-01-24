@@ -29,10 +29,10 @@ func TestMatchAStory(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !story.Match("the daemon in technology has started") {
+	if !story.Match("the gopher gala has started") {
 		t.Fail()
 	}
-	if story.Match("satan daemon in technology has started") {
+	if story.Match("it is a gopher gala on the prairie") {
 		t.Fail()
 	}
 }

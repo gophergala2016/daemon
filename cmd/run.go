@@ -14,11 +14,6 @@ import (
 	"github.com/gophergala2016/daemon/common"
 )
 
-const (
-	// The interval between scouring the interwebs
-	interval = 15 * time.Minute
-)
-
 var (
 	// EnvironmentVariables is a key/value pairing storing default values.
 	EnvironmentVariables = map[string]string{
@@ -32,7 +27,13 @@ var (
 		ShortName: "",
 		Usage:     "",
 		Action:    run,
-		Flags:     []cli.Flag{},
+		Flags: []cli.Flag{
+			cli.IntFlag{
+				Name:  "interval",
+				Value: 15,
+				Usage: "",
+			},
+		},
 	}
 )
 
@@ -40,6 +41,7 @@ var (
 func run(context *cli.Context) {
 	initEnvironment()
 	exe := common.CurrentExecutable()
+	interval := time.Duration(context.Int("interval")) * time.Minute
 
 	// At an interval scour the interwebs for stories to trigger events
 	doEvery(interval, func() {
