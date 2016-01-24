@@ -10,6 +10,9 @@ import (
 
 func TestScourNoArguments(t *testing.T) {
 	os.Args = []string{"test", "scour"}
+	os.Stdin = pushToStdin(storyWithTriggers)
+	defer cleanupStdin()
+
 	app := cli.NewApp()
 	app.Name = "test"
 	app.Commands = []cli.Command{
@@ -23,7 +26,10 @@ func TestScourNoArguments(t *testing.T) {
 }
 
 func TestScourInvalidFeed(t *testing.T) {
-	os.Args = []string{"test", "scour"}
+	os.Args = []string{"test", "scour", "--feeds", "nonexistent.txt"}
+	os.Stdin = pushToStdin(storyWithTriggers)
+	defer cleanupStdin()
+
 	app := cli.NewApp()
 	app.Name = "test"
 	app.Commands = []cli.Command{
@@ -37,19 +43,19 @@ func TestScourInvalidFeed(t *testing.T) {
 }
 
 func TestScourValidFeed(t *testing.T) {
-	os.Args = []string{"test", "scour"}
-	app := cli.NewApp()
-	app.Name = "test"
-	app.Commands = []cli.Command{
-		CommandScour,
-	}
-
 	file, err := ioutil.TempFile(os.TempDir(), "feeds.txt")
 	if err != nil {
 		t.Fail()
 	}
 	defer os.Remove(file.Name())
 	file.WriteString("http://feeds.reuters.com/news/artsculture?format=xml")
+
+	os.Args = []string{"test", "scour", "--feeds", file.Name()}
+	app := cli.NewApp()
+	app.Name = "test"
+	app.Commands = []cli.Command{
+		CommandScour,
+	}
 
 	err = app.Run(os.Args)
 	if err != nil {

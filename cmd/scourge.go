@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"log"
-	"os"
 	"os/exec"
 
 	"github.com/codegangsta/cli"
@@ -23,7 +22,7 @@ var (
 // Scourge executes the reaction to a story hit.
 func scourge(context *cli.Context) {
 	// Read the story
-	story, err := common.ReadStory(os.Stdin)
+	story, err := common.ReadStory(common.StandardInput())
 	if err != nil {
 		log.Println(err)
 	}

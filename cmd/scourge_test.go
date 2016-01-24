@@ -9,6 +9,9 @@ import (
 
 func TestScourgeWithTriggers(t *testing.T) {
 	os.Args = []string{"test", "scourge"}
+	os.Stdin = pushToStdin(storyWithTriggers)
+	defer cleanupStdin()
+	
 	app := cli.NewApp()
 	app.Name = "test"
 	app.Commands = []cli.Command{
@@ -21,8 +24,11 @@ func TestScourgeWithTriggers(t *testing.T) {
 	}
 }
 
-func TestScourgeWithNoTriggers(t *testing.T) {
+func TestScourgeWithoutTriggers(t *testing.T) {
 	os.Args = []string{"test", "scourge"}
+	os.Stdin = pushToStdin(storyWithoutTriggers)
+	defer cleanupStdin()
+
 	app := cli.NewApp()
 	app.Name = "test"
 	app.Commands = []cli.Command{

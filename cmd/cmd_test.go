@@ -4,11 +4,13 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"testing"
+	// "testing"
 )
 
-const (
-	storyWithTriggers string = `{
+var (
+	stdin *os.File
+
+	storyWithTriggers []byte = []byte(`{
       "included": ["daemon", "tech"],
       "excluded": ["satan"],
       "triggers": [{
@@ -16,9 +18,9 @@ const (
         "arguments": ["pass"],
         "wait": false
       }]
-    }`
+    }`)
 
-	storyWithoutTriggers string = `{
+	storyWithoutTriggers []byte = []byte(`{
       "included": ["daemon", "tech"],
       "excluded": ["satan"],
       "triggers": [{
@@ -26,32 +28,17 @@ const (
         "arguments": ["pass"],
         "wait": false
       }]
-    }`
+    }`)
 )
 
-var stdin *os.File
-
-func TestMain(m *testing.M) {
-	if stdin == nil {
-		stdin = pushToStdin(storyWithTriggers)
-	}
-	os.Stdin = stdin
-
-	r := m.Run()
-
-	cleanupStdin()
-	os.Exit(r)
-}
-
-func pushToStdin(contents string) *os.File {
+func pushToStdin(contents []byte) *os.File {
 	file, _ := ioutil.TempFile(os.TempDir(), "stdin")
 
 	if file != nil {
-		file.WriteString(contents)
-		file.Sync()
-		return file
+		os.Stdin = file
 	}
 
+	os.Stdin.Write(contents)
 	return os.Stdin
 }
 

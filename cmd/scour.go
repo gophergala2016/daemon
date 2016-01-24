@@ -34,7 +34,7 @@ func scour(context *cli.Context) {
 	path := context.String("feeds")
 
 	// Read our current story file
-	story, err := common.ReadStory(os.Stdin)
+	story, err := common.ReadStory(common.StandardInput())
 	if err != nil {
 		log.Println(err)
 		return

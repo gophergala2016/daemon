@@ -4,9 +4,10 @@ import (
 	"bytes"
 	"encoding/xml"
 	"html/template"
+	"os"
 
 	"github.com/bmallred/go-charset/charset"
-	// _ "github.com/bmallred/go-charset/data" // included for the datafiles
+	 // _ "github.com/bmallred/go-charset/data" // included for the data
 )
 
 // Error message for when the XML is expected to be in Atom format
@@ -80,5 +81,7 @@ func createDecoder(content []byte) *xml.Decoder {
 	// Create a new XML decoder with the ability to handle multiple character sets
 	d := xml.NewDecoder(b)
 	d.CharsetReader = charset.NewReader
+	// Complete hack and needs to be revised, but couldn't get this to work otherwise
+	charset.CharsetDir = os.Getenv("GOPATH") + "/src/github.com/bmallred/go-charset/datafiles"
 	return d
 }
