@@ -25,7 +25,7 @@ func scourge(context *cli.Context) {
 	// Read the story
 	story, err := common.ReadStory(os.Stdin)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
 	// Check if there is anything to execute

@@ -1,57 +1,57 @@
 package cmd
 
 import (
-	"bytes"
+	"io/ioutil"
 	"os"
-	"os/exec"
 	"testing"
 
-	"github.com/gophergala2016/daemon/common"
+	"github.com/codegangsta/cli"
 )
 
 func TestScourNoArguments(t *testing.T) {
-	slash := string(os.PathSeparator)
-	dir, _ := os.Getwd()
-	base := dir + slash + ".." + slash
-	pipeline := common.Pipeline{
-		exec.Command(base+"daemon", "scour"),
+	os.Args = []string{"test", "scour"}
+	app := cli.NewApp()
+	app.Name = "test"
+	app.Commands = []cli.Command{
+		CommandScour,
 	}
 
-	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
-	reader := bytes.NewReader(contents)
-	_, err := pipeline.Run(reader)
+	err := app.Run(os.Args)
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestScourInvalidFeed(t *testing.T) {
-	slash := string(os.PathSeparator)
-	dir, _ := os.Getwd()
-	base := dir + slash + ".." + slash
-	pipeline := common.Pipeline{
-		exec.Command(base+"daemon", "scour", "--feed", base+"does_not_exist.txt"),
+	os.Args = []string{"test", "scour"}
+	app := cli.NewApp()
+	app.Name = "test"
+	app.Commands = []cli.Command{
+		CommandScour,
 	}
 
-	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
-	reader := bytes.NewReader(contents)
-	_, err := pipeline.Run(reader)
+	err := app.Run(os.Args)
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestScourValidFeed(t *testing.T) {
-	slash := string(os.PathSeparator)
-	dir, _ := os.Getwd()
-	base := dir + slash + ".." + slash
-	pipeline := common.Pipeline{
-		exec.Command(base+"daemon", "scour", "--feed", base+"feeds.txt"),
+	os.Args = []string{"test", "scour"}
+	app := cli.NewApp()
+	app.Name = "test"
+	app.Commands = []cli.Command{
+		CommandScour,
 	}
 
-	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
-	reader := bytes.NewReader(contents)
-	_, err := pipeline.Run(reader)
+	file, err := ioutil.TempFile(os.TempDir(), "feeds.txt")
+	if err != nil {
+		t.Fail()
+	}
+	defer os.Remove(file.Name())
+	file.WriteString("http://feeds.reuters.com/news/artsculture?format=xml")
+
+	err = app.Run(os.Args)
 	if err != nil {
 		t.Error(err)
 	}

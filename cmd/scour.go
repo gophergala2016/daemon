@@ -36,13 +36,15 @@ func scour(context *cli.Context) {
 	// Read our current story file
 	story, err := common.ReadStory(os.Stdin)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
 	// Open the feed
 	f, err := os.Open(path)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 	defer f.Close()
 
@@ -58,7 +60,8 @@ func scour(context *cli.Context) {
 		}
 	}
 	if err := bf.Err(); err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
 	// Loop through each feed searching for a matching story
@@ -93,5 +96,5 @@ func scour(context *cli.Context) {
 	}
 
 	// If nothing hit then report a failure
-	log.Fatalln("Could not find a story match")
+	log.Println("Could not find a story match")
 }

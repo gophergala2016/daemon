@@ -55,7 +55,7 @@ func (s *Story) ToJSON() ([]byte, error) {
 func (s Story) Find(url string) (Story, error) {
 	feed, err := reader.GetFeed(url)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 		return s, err
 	}
 
