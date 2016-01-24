@@ -39,7 +39,7 @@ var (
 // Run the main daemon processes.
 func run(context *cli.Context) {
 	initEnvironment()
-	exe := currentExecutable()
+	exe := common.CurrentExecutable()
 
 	// At an interval scour the interwebs for stories to trigger events
 	doEvery(interval, func() {
@@ -126,14 +126,6 @@ func storyDirectory() string {
 	}
 
 	return path
-}
-
-// Get the path to this executable.
-func currentExecutable() string {
-	fn := os.Args[0]
-	fd := filepath.Dir(fn)
-	fp, _ := filepath.Abs(fd)
-	return fp + "/" + fn
 }
 
 // Find all story files from the given directory.

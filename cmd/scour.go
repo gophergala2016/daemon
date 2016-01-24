@@ -20,7 +20,7 @@ var (
 		Action:    scour,
 		Flags: []cli.Flag{
 			cli.StringFlag{
-				Name:  "feed",
+				Name:  "feeds",
 				Value: "feeds.txt",
 				Usage: "",
 			},
@@ -31,7 +31,7 @@ var (
 // Scour a collection of feeds looking for a match to the given story.
 func scour(context *cli.Context) {
 	// Get the path to the file containing the feeds
-	path := context.String("feed")
+	path := context.String("feeds")
 
 	// Read our current story file
 	story, err := common.ReadStory(os.Stdin)

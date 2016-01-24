@@ -6,10 +6,8 @@ import (
 	"html/template"
 
 	"github.com/bmallred/go-charset/charset"
+	_ "github.com/bmallred/go-charset/data" // included for the datafiles
 )
-
-// TODO: Determine if this import is still necessary:
-//       _ "code.google.com/p/go-charset/data"
 
 // Error message for when the XML is expected to be in Atom format
 const errorExpectedAtom = "expected element type <rss> but have <feed>"
