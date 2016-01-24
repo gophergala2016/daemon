@@ -94,7 +94,7 @@ Besides being an experiment of what can be done in a weekend this could actually
 
 ## Example
 
-[![daemon in action](https://www.youtube.com/vi/kMmzyPthHdU/0.jpg](https://www.youtube.com/watch?v=kMmzyPthHdU)
+[![daemon in action](https://img.youtube.com/vi/kMmzyPthHdU/0.jpg)](https://www.youtube.com/watch?v=kMmzyPthHdU)
 
 With this arbitrary example we pull down the latest and greatest and then modify the story to and watch as
 it hits on a news item and sends a notification to [dunst](http://knopwob.org/dunst/index.html) displaying
