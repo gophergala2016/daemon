@@ -6,7 +6,7 @@ import (
 	"html/template"
 
 	"github.com/bmallred/go-charset/charset"
-	_ "github.com/bmallred/go-charset/data" // included for the datafiles
+	// _ "github.com/bmallred/go-charset/data" // included for the datafiles
 )
 
 // Error message for when the XML is expected to be in Atom format
