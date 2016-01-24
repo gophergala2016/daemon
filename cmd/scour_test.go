@@ -1,42 +1,58 @@
 package cmd
 
-import "testing"
+import (
+	"bytes"
+	"os"
+	"os/exec"
+	"testing"
+
+	"github.com/gophergala2016/daemon/common"
+)
 
 func TestScourNoArguments(t *testing.T) {
-	// app := cli.NewApp()
-	// app.Writer = ioutil.Discard
-	// app.Commands = []cli.Command{
-	// 	CommandScour,
-	// }
+	slash := string(os.PathSeparator)
+	dir, _ := os.Getwd()
+	base := dir + slash + ".." + slash
+	pipeline := common.Pipeline{
+		exec.Command(base+"daemon", "scour"),
+	}
 
-	// err := app.Run([]string{common.CurrentExecutable(), CommandScour.Name})
-	// if err != nil {
-	// 	t.Error(err)
-	// }
+	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
+	reader := bytes.NewReader(contents)
+	_, err := pipeline.Run(reader)
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestScourInvalidFeed(t *testing.T) {
-	// app := cli.NewApp()
-	// app.Writer = ioutil.Discard
-	// app.Commands = []cli.Command{
-	// 	CommandScour,
-	// }
+	slash := string(os.PathSeparator)
+	dir, _ := os.Getwd()
+	base := dir + slash + ".." + slash
+	pipeline := common.Pipeline{
+		exec.Command(base+"daemon", "scour", "--feed", base+"does_not_exist.txt"),
+	}
 
-	// err := app.Run([]string{common.CurrentExecutable(), CommandScour.Name, "--feed", "babble.io"})
-	// if err != nil {
-	// 	t.Error(err)
-	// }
+	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
+	reader := bytes.NewReader(contents)
+	_, err := pipeline.Run(reader)
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestScourValidFeed(t *testing.T) {
-	// app := cli.NewApp()
-	// app.Writer = ioutil.Discard
-	// app.Commands = []cli.Command{
-	// 	CommandScour,
-	// }
+	slash := string(os.PathSeparator)
+	dir, _ := os.Getwd()
+	base := dir + slash + ".." + slash
+	pipeline := common.Pipeline{
+		exec.Command(base+"daemon", "scour", "--feed", base+"feeds.txt"),
+	}
 
-	// err := app.Run([]string{common.CurrentExecutable(), CommandScour.Name, "--feeds", "http://rss.cnn.com/rss/cnn_latest.rss"})
-	// if err != nil {
-	// 	t.Error(err)
-	// }
+	contents := []byte(`{"included": ["daemon", "tech"], "excluded": ["satan"], "triggers": [{"command": "touch", "arguments": ["pass"], "wait": false}]}`)
+	reader := bytes.NewReader(contents)
+	_, err := pipeline.Run(reader)
+	if err != nil {
+		t.Error(err)
+	}
 }
