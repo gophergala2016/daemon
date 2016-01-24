@@ -8,7 +8,7 @@ build:
     - script:
         name: go get
         code: |
-          go get
+          go get -d -t ./...
 
     # Build the project
     - script:

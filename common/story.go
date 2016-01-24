@@ -3,8 +3,10 @@ package common
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"strings"
 
 	"github.com/gophergala2016/daemon/reader"
@@ -47,6 +49,58 @@ func (s *Story) FromJSON(content string) error {
 // ToJSON converts a story to JSON format.
 func (s *Story) ToJSON() ([]byte, error) {
 	return json.Marshal(s)
+}
+
+// Find will read the feed and check if the story matches the criterion.
+func (s Story) Find(url string) (Story, error) {
+	feed, err := reader.GetFeed(url)
+	if err != nil {
+		log.Fatalln(err)
+		return s, err
+	}
+
+	for _, article := range feed.Items {
+		t := fmt.Sprintf("%s %s", article.Title, string(article.Description))
+		if s.Match(t) {
+			s.Article = article
+			return s, nil
+		}
+	}
+
+	return s, errors.New("Not found")
+}
+
+// Match validates whether the content is within the story parameters.
+func (s Story) Match(content string) bool {
+	return s.validateInclusions(content) && s.validateExclusions(content)
+}
+
+// validateInclusions determines if all `included` words are present.
+func (s Story) validateInclusions(content string) bool {
+	hits := 0
+
+	content = strings.ToLower(content)
+	for _, word := range s.Included {
+		if strings.Contains(content, strings.ToLower(word)) {
+			hits++
+		}
+	}
+
+	return hits == len(s.Included)
+}
+
+// validateExclusions determines if all `excluded` words are not present.
+func (s Story) validateExclusions(content string) bool {
+	hits := 0
+
+	content = strings.ToLower(content)
+	for _, word := range s.Excluded {
+		if !strings.Contains(content, strings.ToLower(word)) {
+			hits++
+		}
+	}
+
+	return hits == len(s.Excluded)
 }
 
 // ReadStory reads from a stream of JSON in to a story.
