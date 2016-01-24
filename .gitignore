@@ -1,4 +1,6 @@
 daemon
 *.test
 *.out
-coverage.json
+pass
+gophers-unite
+*.json
